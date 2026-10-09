@@ -99,8 +99,8 @@ It exists as **two chains** that differ in exactly one mathematical input — th
 stabilization-trace sign of §3.4 — and run that difference all the way to Theorem 1.1.
 
 ```
-2b4m check openai-wiles/architecture-right.md theWeilPlaneIsSpannedByAlgebraicClasses  # PASSES
-2b4m check openai-wiles/architecture-wrong.md theWeilPlaneIsSpannedByAlgebraicClasses  # FAILS
+2b4m check architecture-right.md theWeilPlaneIsSpannedByAlgebraicClasses  # PASSES
+2b4m check architecture-wrong.md theWeilPlaneIsSpannedByAlgebraicClasses  # FAILS
 ```
 
 | chain | reverse-trace sign | outcome |
@@ -184,7 +184,7 @@ Every unproved step is a `hole` carrying a citation, so strict `check` passes wh
 each locator:
 
 ```
-2b4m check --axioms openai-wiles/architecture-right.md theWeilPlaneIsSpannedByAlgebraicClasses
+2b4m check --axioms architecture-right.md theWeilPlaneIsSpannedByAlgebraicClasses
 ```
 
 36 cited holes, drawn from arXiv:1303.0588v2 and arXiv:1303.0586v1, Fulton [14],
@@ -193,12 +193,42 @@ Grauert–Remmert [15], Grothendieck [16], Milne [20], and quoted manuscript lin
 definition. **A citation is not a verification:** the checker cannot confirm that a source says
 what a locator claims, which is why it prints them all rather than going quiet.
 
+## This was also an exercise in LLM-assisted proof writing
+
+The formalization was written with an LLM, and the directory doubled as a test of 2b4m's
+ergonomics for that: what the language has to make hard in order for a machine-written audit
+to be trustworthy.
+
+The sharpest finding came from a failure. Along the way the audit produced an **incorrect
+diagnosis** — that §3.4 is *circular*, because [6] supposedly grants the `+1` reverse-trace
+sign only when the target link is loose, and §3.4 presents looseness as that step's output.
+The checker appeared to confirm it. It was wrong: the looseness hypothesis had been *invented*
+and attributed to [6], and reading Lemma 3.4's **proof** (rather than only its statement, where
+the signs are not assigned) shows looseness gates the destabilization traces `G₃`/`G₄`, not the
+reverse trace `G₂`. A false axiom with a confident comment checks green forever.
+
+Two changes came out of that, and both are why this version is worth reading:
+
+- **`hole … cites "<source>"`** — the mechanism described above. Before it, `axiom` meant
+  "theory primitive" and `hole` meant "strict check rejects this", so a result borrowed from
+  the literature had no honest home and kept getting written as a local axiom to make the tree
+  go green. Now a borrowed fact is a hole that *passes* while staying disclosed, a bare hole
+  still fails, and `axiom … cites` is a hard error so the escape hatch cannot be rebuilt.
+- **Prompt rules now in [2b4m's cheat-sheet](https://github.com/ityonemo/2b4m/blob/main/agents/2b4m-cheatsheet.md)**
+  under "THE AXIOMATIZATION RULE": write `hole` *first* for anything you cannot cite, never
+  axiom-then-audit; axiomatize a reference *from the reference*, not from the paper citing it;
+  and check that a disputed input is load-bearing before concluding anything from a green tree.
+  The last one caught a real false negative here — the first attempt at the right/wrong split
+  passed on *both* signs, because the trace count had been defined as a constant.
+
+Measured, for anyone calibrating how much to trust this kind of output: auditing axioms
+*after* writing them caught 4 violations of 29 — and the pass that fixed those introduced 5
+more. Self-review does not converge; a mechanism that refuses to proceed does.
+
 ## Caveats
 
-- **§3.4 is not circular, and `reverseTraceSign` carries no looseness hypothesis.** [6]'s
-  Lemma 3.4 *proof* assigns the looseness condition to the destabilization traces `G₃`/`G₄`,
-  not to the reverse trace `G₂` — `φ₁` is a stabilization and hence already loose. The
-  manuscript's step is sound as cited; the dispute is only about the sign's value.
+- **§3.4 is not circular, and `reverseTraceSign` carries no looseness hypothesis** — see
+  above. The manuscript's step is sound as cited; the dispute is only about the sign's value.
 - **Sections 4–11's symplectic topology is not verified.** Those sections are the origin of
   several cited inputs here (`anAlternatingChernCharacterIsAlgebraic`, §10's Euler-pairing
   identities), and the formalization takes them at their word.
