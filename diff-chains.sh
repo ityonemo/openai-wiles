@@ -52,6 +52,6 @@ if [ "$rc" = 0 ]; then
   echo " so swapping the sign module changed nothing and both chains passed.)"
 else
   echo "Verify the split is real:"
-  echo "  2b4m check openai-wiles/architecture-right.md theWeilPlaneIsSpannedByAlgebraicClasses  # PASSES"
-  echo "  2b4m check openai-wiles/architecture-wrong.md theWeilPlaneIsSpannedByAlgebraicClasses  # FAILS at Lemma 3.6"
+  echo "  2b4m check architecture-right.md theWeilPlaneIsSpannedByAlgebraicClasses  # PASSES"
+  echo "  2b4m check architecture-wrong.md theWeilPlaneIsSpannedByAlgebraicClasses  # FAILS at Lemma 3.6"
 fi
