@@ -180,37 +180,37 @@ proof
                               @the-weil-part-is-in-the-plane-and-nonzero |
                                 inWeilPlane(p, weilPart(p, c)) and
                                   (not isZeroClass(weilPart(p, c)))
-                                [by and_intro its-weil-part-is-in-the-plane its-weil-part-is-nonzero]
+                                [by both its-weil-part-is-in-the-plane its-weil-part-is-nonzero]
                               @the-marked-form-works |
                                 inWeilPlane(p, weilPart(p, c)) and
                                   (not isZeroClass(weilPart(p, c))) and
                                   isAlgebraic(p, add(scale(polarizationCoefficient(p, c),
                                   polarizationPower), weilPart(p, c)))
-                                [by and_intro the-weil-part-is-in-the-plane-and-nonzero the-marked-form-is-algebraic]
+                                [by both the-weil-part-is-in-the-plane-and-nonzero the-marked-form-is-algebraic]
                               @a-weil-part-exists |
                                 exists w: CycleClass;
                                   inWeilPlane(p, w) and (not isZeroClass(w)) and
                                   isAlgebraic(p, add(scale(polarizationCoefficient(p, c),
                                   polarizationPower), w))
-                                [by exists_intro(weilPart(p, c)) the-marked-form-works]
+                                [by witness(weilPart(p, c)) the-marked-form-works]
                               @conclusion-a-marked-pair-exists |
                                 exists a: CycleClass; exists w: CycleClass;
                                   inWeilPlane(p, w) and (not isZeroClass(w)) and
                                   isAlgebraic(p, add(scale(a, polarizationPower), w))
-                                [by exists_intro(polarizationCoefficient(p, c)) a-weil-part-exists]
+                                [by witness(polarizationCoefficient(p, c)) a-weil-part-exists]
                             }
                           @conclusion-marked-pair |
                             exists a: CycleClass; exists w: CycleClass;
                               inWeilPlane(p, w) and (not isZeroClass(w)) and
                               isAlgebraic(p, add(scale(a, polarizationPower), w))
-                            [by exists_elim with-the-constituent]
+                            [by unpacked with-the-constituent]
                         }
                       @conclusion-weil-gives |
                         transport.hasNonzeroWeilProjection(transport.theComplexPeriodClass) ->
                           (exists a: CycleClass; exists w: CycleClass;
                           inWeilPlane(p, w) and (not isZeroClass(w)) and
                           isAlgebraic(p, add(scale(a, polarizationPower), w)))
-                        [by implies_intro given-nonzero-weil-projection]
+                        [by discharge given-nonzero-weil-projection]
                     }
                   @conclusion-represented-gives |
                     representedByIntegralSubvarietiesAt(p, transport.theComplexPeriodClass) ->
@@ -218,7 +218,7 @@ proof
                       (exists a: CycleClass; exists w: CycleClass;
                       inWeilPlane(p, w) and (not isZeroClass(w)) and
                       isAlgebraic(p, add(scale(a, polarizationPower), w)))
-                    [by implies_intro given-represented]
+                    [by discharge given-represented]
                 }
               @conclusion-avoids-gives |
                 avoidsExceptional(p) ->
@@ -227,7 +227,7 @@ proof
                   (exists a: CycleClass; exists w: CycleClass;
                   inWeilPlane(p, w) and (not isZeroClass(w)) and
                   isAlgebraic(p, add(scale(a, polarizationPower), w)))
-                [by implies_intro given-p-avoids]
+                [by discharge given-p-avoids]
             }
           @conclusion-parameter-gives |
             inParameterSet(p) -> avoidsExceptional(p) ->
@@ -236,7 +236,7 @@ proof
               (exists a: CycleClass; exists w: CycleClass;
               inWeilPlane(p, w) and (not isZeroClass(w)) and
               isAlgebraic(p, add(scale(a, polarizationPower), w)))
-            [by implies_intro given-p-in-the-parameter-set]
+            [by discharge given-p-in-the-parameter-set]
         }
       @conclusion-at-p |
         transport.aGoodPeriodExists() ->
@@ -246,7 +246,7 @@ proof
           (exists a: CycleClass; exists w: CycleClass;
           inWeilPlane(p, w) and (not isZeroClass(w)) and
           isAlgebraic(p, add(scale(a, polarizationPower), w)))
-        [by implies_intro given-a-good-period]
+        [by discharge given-a-good-period]
     }
   @conclusion |
     forall p: Period;
@@ -257,7 +257,7 @@ proof
       (exists a: CycleClass; exists w: CycleClass;
       inWeilPlane(p, w) and (not isZeroClass(w)) and
       isAlgebraic(p, add(scale(a, polarizationPower), w)))
-    [by forall_intro generalize-p]
+    [by generalize generalize-p]
 qed
 
 // §12.3's last move, PROVED from (a) and (b).
@@ -312,20 +312,20 @@ proof
                     [using specialize aNonzeroWeilProjectionSelectsAMarkedConstituent(p) a-good-period-exists the-period-is-in-the-parameter-set the-period-avoids-the-exceptional-loci the-class-is-represented-there the-weil-projection-is-nonzero]
                   @the-period-is-good |
                     inParameterSet(p) and avoidsExceptional(p)
-                    [by and_intro the-period-is-in-the-parameter-set the-period-avoids-the-exceptional-loci]
+                    [by both the-period-is-in-the-parameter-set the-period-avoids-the-exceptional-loci]
                   @the-period-works |
                     inParameterSet(p) and avoidsExceptional(p) and
                       (exists a: CycleClass; exists w: CycleClass;
                       inWeilPlane(p, w) and (not isZeroClass(w)) and
                       isAlgebraic(p, add(scale(a, polarizationPower), w)))
-                    [by and_intro the-period-is-good a-marked-constituent-exists]
+                    [by both the-period-is-good a-marked-constituent-exists]
                   @conclusion-a-marked-period-exists |
                     exists q: Period;
                       inParameterSet(q) and avoidsExceptional(q) and
                       (exists a: CycleClass; exists w: CycleClass;
                       inWeilPlane(q, w) and (not isZeroClass(w)) and
                       isAlgebraic(q, add(scale(a, polarizationPower), w)))
-                    [by exists_intro(p) the-period-works]
+                    [by witness(p) the-period-works]
                 }
               @conclusion-a-marked-period |
                 exists q: Period;
@@ -333,7 +333,7 @@ proof
                   (exists a: CycleClass; exists w: CycleClass;
                   inWeilPlane(q, w) and (not isZeroClass(w)) and
                   isAlgebraic(q, add(scale(a, polarizationPower), w)))
-                [by exists_elim with-the-representing-period]
+                [by unpacked with-the-representing-period]
             }
           @conclusion-weil-projection-gives |
             transport.hasNonzeroWeilProjection(transport.theComplexPeriodClass) ->
@@ -342,7 +342,7 @@ proof
               (exists a: CycleClass; exists w: CycleClass;
               inWeilPlane(q, w) and (not isZeroClass(w)) and
               isAlgebraic(q, add(scale(a, polarizationPower), w))))
-            [by implies_intro given-a-nonzero-weil-projection]
+            [by discharge given-a-nonzero-weil-projection]
         }
       @conclusion-rational-algebraic-gives |
         transport.isRationalAlgebraicClass(transport.theComplexPeriodClass) ->
@@ -352,7 +352,7 @@ proof
           (exists a: CycleClass; exists w: CycleClass;
           inWeilPlane(q, w) and (not isZeroClass(w)) and
           isAlgebraic(q, add(scale(a, polarizationPower), w))))
-        [by implies_intro given-the-class-is-rational-algebraic]
+        [by discharge given-the-class-is-rational-algebraic]
     }
   @conclusion |
     transport.aGoodPeriodExists() ->
@@ -363,7 +363,7 @@ proof
       (exists a: CycleClass; exists w: CycleClass;
       inWeilPlane(p, w) and (not isZeroClass(w)) and
       isAlgebraic(p, add(scale(a, polarizationPower), w))))
-    [by implies_intro given-a-good-period]
+    [by discharge given-a-good-period]
 qed
 
 theorem theConstructionDeliversAMarkedClass:
@@ -384,16 +384,16 @@ proof
       @the-period-and-the-class |
         transport.aGoodPeriodExists()
           and transport.isRationalAlgebraicClass(transport.theComplexPeriodClass)
-        [by and_elim_left the-detection-chain]
+        [by and_lhs the-detection-chain]
       @a-good-period-exists |
         transport.aGoodPeriodExists()
-        [by and_elim_left the-period-and-the-class]
+        [by and_lhs the-period-and-the-class]
       @the-class-is-algebraic |
         transport.isRationalAlgebraicClass(transport.theComplexPeriodClass)
-        [by and_elim_right the-period-and-the-class]
+        [by and_rhs the-period-and-the-class]
       @the-class-has-a-weil-projection |
         transport.hasNonzeroWeilProjection(transport.theComplexPeriodClass)
-        [by and_elim_right the-detection-chain]
+        [by and_rhs the-detection-chain]
       @conclusion-a-marked-class-exists |
         exists p: Period;
           inParameterSet(p) and avoidsExceptional(p) and
@@ -409,7 +409,7 @@ proof
       (exists a: CycleClass; exists w: CycleClass;
       inWeilPlane(p, w) and (not isZeroClass(w)) and
       isAlgebraic(p, add(scale(a, polarizationPower), w))))
-    [by implies_intro given-an-embedded-lagrangian]
+    [by discharge given-an-embedded-lagrangian]
 qed
 
 theorem aMarkedAlgebraicClassExistsAtSomeGoodPeriod: exists p: Period;

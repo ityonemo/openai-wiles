@@ -61,7 +61,7 @@ proof
     }
   @conclusion |
     not inTheSpanOfThePolarizationPowers(theGenericClass)
-    [by not_intro given-in-the-span then-the-special-class-is-too but-the-special-class-is-not]
+    [by contradiction given-in-the-span then-the-special-class-is-too but-the-special-class-is-not]
 qed
 ```
 
@@ -114,11 +114,11 @@ proof
     }
   @the-class-is-outside-the-span |
     not inTheSpanOfThePolarizationPowers(theComplexPeriodClass)
-    [by not_intro given-in-the-span then-the-generic-class-is-too but-the-generic-class-is-not]
+    [by contradiction given-in-the-span then-the-generic-class-is-too but-the-generic-class-is-not]
   @conclusion |
     isRationalAlgebraicClass(theComplexPeriodClass)
       and (not inTheSpanOfThePolarizationPowers(theComplexPeriodClass))
-    [by and_intro the-class-is-algebraic the-class-is-outside-the-span]
+    [by both the-class-is-algebraic the-class-is-outside-the-span]
 qed
 ```
 
@@ -169,19 +169,19 @@ proof
     [by cite aRationalAlgebraicClassOutsideTheSpanExists]
   @the-class-is-algebraic |
     isRationalAlgebraicClass(theComplexPeriodClass)
-    [by and_elim_left the-class-facts]
+    [by and_lhs the-class-facts]
   @the-class-is-outside-the-span |
     not inTheSpanOfThePolarizationPowers(theComplexPeriodClass)
-    [by and_elim_right the-class-facts]
+    [by and_rhs the-class-facts]
   @the-class-has-a-weil-projection |
     hasNonzeroWeilProjection(theComplexPeriodClass)
     [using specialize outsideTheSpanForcesANonzeroWeilProjection the-class-is-outside-the-span]
   @the-period-and-the-class |
     aGoodPeriodExists() and isRationalAlgebraicClass(theComplexPeriodClass)
-    [by and_intro a-good-period-exists the-class-is-algebraic]
+    [by both a-good-period-exists the-class-is-algebraic]
   @conclusion |
     aGoodPeriodExists() and isRationalAlgebraicClass(theComplexPeriodClass)
       and hasNonzeroWeilProjection(theComplexPeriodClass)
-    [by and_intro the-period-and-the-class the-class-has-a-weil-projection]
+    [by both the-period-and-the-class the-class-has-a-weil-projection]
 qed
 ```

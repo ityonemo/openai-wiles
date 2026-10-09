@@ -88,24 +88,24 @@ proof
                 }
               @conclusion-c-gives |
                 inComponent(c) -> markedChernCharacter(b) = markedChernCharacter(c)
-                [by implies_intro given-c-in-the-component]
+                [by discharge given-c-in-the-component]
             }
           @conclusion-at-c |
             inComponent(b) -> inComponent(c) ->
               markedChernCharacter(b) = markedChernCharacter(c)
-            [by implies_intro given-b-in-the-component]
+            [by discharge given-b-in-the-component]
         }
       @discharge-c |
         forall c: ParameterPoint;
           inComponent(b) -> inComponent(c) ->
           markedChernCharacter(b) = markedChernCharacter(c)
-        [by forall_intro generalize-c]
+        [by generalize generalize-c]
     }
   @conclusion |
     forall b, c: ParameterPoint;
       inComponent(b) -> inComponent(c) ->
       markedChernCharacter(b) = markedChernCharacter(c)
-    [by forall_intro generalize-b]
+    [by generalize generalize-b]
 qed
 ```
 
@@ -203,10 +203,10 @@ proof
                         [by hypothesis with-the-point-over-q]
                       @the-point-is-in-the-component |
                         inComponent(c)
-                        [by and_elim_left the-point-facts]
+                        [by and_lhs the-point-facts]
                       @the-point-lies-over-q |
                         periodOf(c) = q
-                        [by and_elim_right the-point-facts]
+                        [by and_rhs the-point-facts]
                       @the-characters-agree |
                         markedChernCharacter(b) = markedChernCharacter(c)
                         [using specialize the-characters-are-constant(b, c) b-is-in-the-component the-point-is-in-the-component]
@@ -225,25 +225,25 @@ proof
                     }
                   @the-class-is-algebraic-at-q |
                     isAlgebraic(q, markedClassAt(b))
-                    [by exists_elim with-the-point-over-q]
+                    [by unpacked with-the-point-over-q]
                 }
               @conclusion-at-q |
                 inParameterSet(q) -> isAlgebraic(q, markedClassAt(b))
-                [by implies_intro given-q-in-the-parameter-set]
+                [by discharge given-q-in-the-parameter-set]
             }
           @conclusion-for-every-period |
             forall q: Period; inParameterSet(q) -> isAlgebraic(q, markedClassAt(b))
-            [by forall_intro generalize-q]
+            [by generalize generalize-q]
         }
       @conclusion-at-b |
         inComponent(b) ->
           (forall q: Period; inParameterSet(q) -> isAlgebraic(q, markedClassAt(b)))
-        [by implies_intro given-b-in-the-component]
+        [by discharge given-b-in-the-component]
     }
   @conclusion |
     forall b: ParameterPoint;
       inComponent(b) ->
       forall q: Period; inParameterSet(q) -> isAlgebraic(q, markedClassAt(b))
-    [by forall_intro generalize-b]
+    [by generalize generalize-b]
 qed
 ```

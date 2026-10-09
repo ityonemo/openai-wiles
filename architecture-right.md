@@ -111,44 +111,44 @@ proof
                     [by hypothesis with-the-partner]
                   @the-pair-spans |
                     spansTheWeilPlane(p, w, v)
-                    [by and_elim_left the-partner-facts]
+                    [by and_lhs the-partner-facts]
                   @the-partner-is-algebraic |
                     isAlgebraic(p, v)
-                    [by and_elim_right the-partner-facts]
+                    [by and_rhs the-partner-facts]
                   @the-pair-works |
                     spansTheWeilPlane(p, w, v) and isAlgebraic(p, w) and isAlgebraic(p, v)
                     [using tautology the-pair-spans the-class-is-algebraic-at-p the-partner-is-algebraic]
                   @a-second-coordinate-exists |
                     exists w2: CycleClass;
                       spansTheWeilPlane(p, w, w2) and isAlgebraic(p, w) and isAlgebraic(p, w2)
-                    [by exists_intro(v) the-pair-works]
+                    [by witness(v) the-pair-works]
                   @conclusion-at-the-partner |
                     exists v2: CycleClass; exists w2: CycleClass;
                       spansTheWeilPlane(p, v2, w2) and isAlgebraic(p, v2) and isAlgebraic(p, w2)
-                    [by exists_intro(w) a-second-coordinate-exists]
+                    [by witness(w) a-second-coordinate-exists]
                 }
               @conclusion-a-spanning-pair-exists |
                 exists v2: CycleClass; exists w2: CycleClass;
                   spansTheWeilPlane(p, v2, w2) and isAlgebraic(p, v2) and isAlgebraic(p, w2)
-                [by exists_elim with-the-partner]
+                [by unpacked with-the-partner]
             }
           @conclusion-p-gives |
             inParameterSet(p) ->
               (exists v2: CycleClass; exists w2: CycleClass;
               spansTheWeilPlane(p, v2, w2) and isAlgebraic(p, v2) and isAlgebraic(p, w2))
-            [by implies_intro given-p-in-the-parameter-set]
+            [by discharge given-p-in-the-parameter-set]
         }
       @conclusion-at-the-weil-class |
         forall p: Period; inParameterSet(p) ->
           (exists v2: CycleClass; exists w2: CycleClass;
           spansTheWeilPlane(p, v2, w2) and isAlgebraic(p, v2) and isAlgebraic(p, w2))
-        [by forall_intro generalize-p]
+        [by generalize generalize-p]
     }
   @conclusion |
     forall p: Period; inParameterSet(p) ->
       (exists v: CycleClass; exists w: CycleClass;
       spansTheWeilPlane(p, v, w) and isAlgebraic(p, v) and isAlgebraic(p, w))
-    [by exists_elim with-the-weil-class]
+    [by unpacked with-the-weil-class]
 qed
 ```
 
@@ -249,38 +249,38 @@ proof
                     }
                   @conclusion-q-gives |
                     inParameterSet(q) -> isAlgebraic(q, w)
-                    [by implies_intro given-q-in-the-parameter-set]
+                    [by discharge given-q-in-the-parameter-set]
                 }
               @the-weil-part-is-algebraic-everywhere |
                 forall q: Period; inParameterSet(q) -> isAlgebraic(q, w)
-                [by forall_intro generalize-q]
+                [by generalize generalize-q]
               @the-witness-works |
                 (not isZeroClass(w)) and
                   (forall q: Period; inParameterSet(q) -> isAlgebraic(q, w))
-                [by and_intro the-weil-part-is-nonzero the-weil-part-is-algebraic-everywhere]
+                [by both the-weil-part-is-nonzero the-weil-part-is-algebraic-everywhere]
               @conclusion-at-the-weil-part |
                 exists w2: CycleClass;
                   (not isZeroClass(w2)) and
                   (forall q: Period; inParameterSet(q) -> isAlgebraic(q, w2))
-                [by exists_intro(w) the-witness-works]
+                [by witness(w) the-witness-works]
             }
           @conclusion-at-the-coefficient |
             exists w2: CycleClass;
               (not isZeroClass(w2)) and
               (forall q: Period; inParameterSet(q) -> isAlgebraic(q, w2))
-            [by exists_elim with-the-weil-part]
+            [by unpacked with-the-weil-part]
         }
       @conclusion-at-the-period |
         exists w2: CycleClass;
           (not isZeroClass(w2)) and
           (forall q: Period; inParameterSet(q) -> isAlgebraic(q, w2))
-        [by exists_elim with-the-coefficient]
+        [by unpacked with-the-coefficient]
     }
   @conclusion |
     exists w: CycleClass;
       (not isZeroClass(w)) and
       (forall q: Period; inParameterSet(q) -> isAlgebraic(q, w))
-    [by exists_elim with-the-marked-period]
+    [by unpacked with-the-marked-period]
 qed
 ```
 
@@ -353,43 +353,43 @@ proof
                             [using specialize the-endomorphism-spans(p, w) p-is-in-the-parameter-set w-is-nonzero]
                           @the-partner-works |
                             spansTheWeilPlane(p, w, pullback(e, w)) and isAlgebraic(p, pullback(e, w))
-                            [by and_intro the-pair-spans the-pullback-is-algebraic]
+                            [by both the-pair-spans the-pullback-is-algebraic]
                           @conclusion-a-partner-exists |
                             exists v: CycleClass; spansTheWeilPlane(p, w, v) and isAlgebraic(p, v)
-                            [by exists_intro(pullback(e, w)) the-partner-works]
+                            [by witness(pullback(e, w)) the-partner-works]
                         }
                       @conclusion-algebraic-gives |
                         isAlgebraic(p, w) ->
                           (exists v: CycleClass; spansTheWeilPlane(p, w, v) and isAlgebraic(p, v))
-                        [by implies_intro given-w-algebraic]
+                        [by discharge given-w-algebraic]
                     }
                   @conclusion-nonzero-gives |
                     (not isZeroClass(w)) -> isAlgebraic(p, w) ->
                       (exists v: CycleClass; spansTheWeilPlane(p, w, v) and isAlgebraic(p, v))
-                    [by implies_intro given-w-nonzero]
+                    [by discharge given-w-nonzero]
                 }
               @conclusion-at-w |
                 inParameterSet(p) -> (not isZeroClass(w)) -> isAlgebraic(p, w) ->
                   (exists v: CycleClass; spansTheWeilPlane(p, w, v) and isAlgebraic(p, v))
-                [by implies_intro given-p-in-the-parameter-set]
+                [by discharge given-p-in-the-parameter-set]
             }
           @discharge-w |
             forall w: CycleClass;
               inParameterSet(p) -> (not isZeroClass(w)) -> isAlgebraic(p, w) ->
               (exists v: CycleClass; spansTheWeilPlane(p, w, v) and isAlgebraic(p, v))
-            [by forall_intro generalize-w]
+            [by generalize generalize-w]
         }
       @conclusion-at-the-endomorphism |
         forall p: Period; forall w: CycleClass;
           inParameterSet(p) -> (not isZeroClass(w)) -> isAlgebraic(p, w) ->
           (exists v: CycleClass; spansTheWeilPlane(p, w, v) and isAlgebraic(p, v))
-        [by forall_intro generalize-p]
+        [by generalize generalize-p]
     }
   @conclusion |
     forall p: Period; forall w: CycleClass;
       inParameterSet(p) -> (not isZeroClass(w)) -> isAlgebraic(p, w) ->
       (exists v: CycleClass; spansTheWeilPlane(p, w, v) and isAlgebraic(p, v))
-    [by exists_elim with-the-endomorphism]
+    [by unpacked with-the-endomorphism]
 qed
 ```
 
@@ -453,13 +453,13 @@ proof
       (forall p: Period; forall w: CycleClass;
       inParameterSet(p) -> (not isZeroClass(w)) ->
       spansTheWeilPlane(p, w, pullback(eigenvalues.theConjugation, w)))
-    [by and_intro the-conjugation-is-algebraic the-conjugation-spans]
+    [by both the-conjugation-is-algebraic the-conjugation-spans]
   @conclusion |
     exists e: Endomorphism;
       (forall p: Period; inParameterSet(p) -> isAlgebraicEndomorphism(p, e)) and
       (forall p: Period; forall w: CycleClass;
       inParameterSet(p) -> (not isZeroClass(w)) -> spansTheWeilPlane(p, w, pullback(e, w)))
-    [by exists_intro(eigenvalues.theConjugation) both-halves]
+    [by witness(eigenvalues.theConjugation) both-halves]
 qed
 ```
 
@@ -535,39 +535,39 @@ proof
                       @conclusion-a-marking-point-exists |
                         exists b: ParameterPoint;
                           chern.inComponent(b) and chern.markedClassAt(b) = z
-                        [by exists_intro(markingComponentOf(p, z)) the-class-occurs-in-a-family]
+                        [by witness(markingComponentOf(p, z)) the-class-occurs-in-a-family]
                     }
                   @conclusion-algebraic-gives |
                     isAlgebraic(p, z) ->
                       (exists b: ParameterPoint;
                       chern.inComponent(b) and chern.markedClassAt(b) = z)
-                    [by implies_intro given-z-algebraic]
+                    [by discharge given-z-algebraic]
                 }
               @conclusion-avoids-gives |
                 avoidsExceptional(p) -> isAlgebraic(p, z) ->
                   (exists b: ParameterPoint;
                   chern.inComponent(b) and chern.markedClassAt(b) = z)
-                [by implies_intro given-p-avoids]
+                [by discharge given-p-avoids]
             }
           @conclusion-at-z |
             inParameterSet(p) -> avoidsExceptional(p) -> isAlgebraic(p, z) ->
               (exists b: ParameterPoint;
               chern.inComponent(b) and chern.markedClassAt(b) = z)
-            [by implies_intro given-p-in-the-parameter-set]
+            [by discharge given-p-in-the-parameter-set]
         }
       @discharge-z |
         forall z: CycleClass;
           inParameterSet(p) -> avoidsExceptional(p) -> isAlgebraic(p, z) ->
           (exists b: ParameterPoint;
           chern.inComponent(b) and chern.markedClassAt(b) = z)
-        [by forall_intro generalize-z]
+        [by generalize generalize-z]
     }
   @conclusion |
     forall p: Period; forall z: CycleClass;
       inParameterSet(p) -> avoidsExceptional(p) -> isAlgebraic(p, z) ->
       (exists b: ParameterPoint;
       chern.inComponent(b) and chern.markedClassAt(b) = z)
-    [by forall_intro generalize-p]
+    [by generalize generalize-p]
 qed
 
 // §12.4's spreading principle, PROVED rather than assumed.
@@ -610,10 +610,10 @@ proof
                             [by hypothesis with-the-marking-point]
                           @the-point-is-in-the-component |
                             chern.inComponent(b)
-                            [by and_elim_left the-marking-facts]
+                            [by and_lhs the-marking-facts]
                           @the-point-marks-z |
                             chern.markedClassAt(b) = z
-                            [by and_elim_right the-marking-facts]
+                            [by and_rhs the-marking-facts]
                           @the-marked-class-is-algebraic-everywhere |
                             forall q: Period;
                               inParameterSet(q) -> isAlgebraic(q, chern.markedClassAt(b))
@@ -624,34 +624,34 @@ proof
                         }
                       @conclusion-spread-at-z |
                         forall q: Period; inParameterSet(q) -> isAlgebraic(q, z)
-                        [by exists_elim with-the-marking-point]
+                        [by unpacked with-the-marking-point]
                     }
                   @conclusion-algebraic-gives |
                     isAlgebraic(p, z) ->
                       (forall q: Period; inParameterSet(q) -> isAlgebraic(q, z))
-                    [by implies_intro given-z-algebraic-at-p]
+                    [by discharge given-z-algebraic-at-p]
                 }
               @conclusion-avoiding-gives |
                 avoidsExceptional(p) -> isAlgebraic(p, z) ->
                   (forall q: Period; inParameterSet(q) -> isAlgebraic(q, z))
-                [by implies_intro given-p-avoids-the-exceptional-loci]
+                [by discharge given-p-avoids-the-exceptional-loci]
             }
           @conclusion-at-z |
             inParameterSet(p) -> avoidsExceptional(p) -> isAlgebraic(p, z) ->
               (forall q: Period; inParameterSet(q) -> isAlgebraic(q, z))
-            [by implies_intro given-p-in-the-parameter-set]
+            [by discharge given-p-in-the-parameter-set]
         }
       @discharge-z |
         forall z: CycleClass;
           inParameterSet(p) -> avoidsExceptional(p) -> isAlgebraic(p, z) ->
           forall q: Period; inParameterSet(q) -> isAlgebraic(q, z)
-        [by forall_intro generalize-z]
+        [by generalize generalize-z]
     }
   @conclusion |
     forall p: Period; forall z: CycleClass;
       inParameterSet(p) -> avoidsExceptional(p) -> isAlgebraic(p, z) ->
       forall q: Period; inParameterSet(q) -> isAlgebraic(q, z)
-    [by forall_intro generalize-p]
+    [by generalize generalize-p]
 qed
 
 // Proposition 12.3, re-exported from the file that proves it — the detection chain of

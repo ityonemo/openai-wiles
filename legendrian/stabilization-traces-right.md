@@ -79,7 +79,7 @@ proof
     }
   @conclusion |
     forall l: Link; traceSign(stabilize(stabilize(l)), stabilize(l)) = ONE
-    [by forall_intro generalize-l]
+    [by generalize generalize-l]
 qed
 ```
 
@@ -176,7 +176,7 @@ proof
     [by definition(0) insertedTotal]
   @conclusion |
     insertedTotal(neg(initialIndex)) = mul(neg(initialIndex), theReverseTraceSign)
-    [by forall_elim(neg(initialIndex)) the-total-is-n-times-the-sign]
+    [by apply_at(neg(initialIndex)) the-total-is-n-times-the-sign]
 qed
 
 // This chain's sign, read off its traces module.

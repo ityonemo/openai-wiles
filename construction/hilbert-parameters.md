@@ -78,18 +78,18 @@ proof
             }
           @conclusion-proper-subset-gives |
             isAProperSubsetOfTheBase(imageInTheBase(h)) -> hasEmptyInterior(imageInTheBase(h))
-            [by implies_intro given-the-image-is-a-proper-subset]
+            [by discharge given-the-image-is-a-proper-subset]
         }
       @conclusion-at-h |
         isProperOverTheBase(h) -> isAProperSubsetOfTheBase(imageInTheBase(h)) ->
           hasEmptyInterior(imageInTheBase(h))
-        [by implies_intro given-proper]
+        [by discharge given-proper]
     }
   @conclusion |
     forall h: AnalyticSpace;
       isProperOverTheBase(h) -> isAProperSubsetOfTheBase(imageInTheBase(h)) ->
       hasEmptyInterior(imageInTheBase(h))
-    [by forall_intro generalize-h]
+    [by generalize generalize-h]
 qed
 ```
 

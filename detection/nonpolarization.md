@@ -79,7 +79,7 @@ proof
     }
   @conclusion |
     not isAScalarGraph(theExtraObject)
-    [by not_intro given-it-were-a-scalar-graph then-it-annihilates but-it-detects]
+    [by contradiction given-it-were-a-scalar-graph then-it-annihilates but-it-detects]
 qed
 ```
 
@@ -217,7 +217,7 @@ proof
                   addPairings(x, zeroPairing) = x and
                   addPairings(x, negPairing(x)) = zeroPairing and
                   addPairings(x, y) = addPairings(y, x)
-                [by forall_elim(x, y, negPairing(y)) the-group-laws]
+                [by apply_at(x, y, negPairing(y)) the-group-laws]
               @associativity-at-x-y |
                 addPairings(addPairings(x, y), negPairing(y))
                   = addPairings(x, addPairings(y, negPairing(y)))
@@ -231,7 +231,7 @@ proof
                   addPairings(y, zeroPairing) = y and
                   addPairings(y, negPairing(y)) = zeroPairing and
                   addPairings(y, y) = addPairings(y, y)
-                [by forall_elim(y, y, negPairing(y)) the-group-laws]
+                [by apply_at(y, y, negPairing(y)) the-group-laws]
               @inverse-at-y |
                 addPairings(y, negPairing(y)) = zeroPairing
                 [using tautology the-laws-at-y]
@@ -249,15 +249,15 @@ proof
             }
           @conclusion-at-y |
             addPairings(x, y) = y -> x = zeroPairing
-            [by implies_intro given-the-sum-is-y]
+            [by discharge given-the-sum-is-y]
         }
       @discharge-y |
         forall y: Class; addPairings(x, y) = y -> x = zeroPairing
-        [by forall_intro generalize-y]
+        [by generalize generalize-y]
     }
   @conclusion |
     forall x: Class; forall y: Class; addPairings(x, y) = y -> x = zeroPairing
-    [by forall_intro generalize-x]
+    [by generalize generalize-x]
 qed
 
 // CITATION, §10.7's opening line: "Lemma 7.4 and Proposition 10.2 identify
@@ -297,19 +297,19 @@ proof
       = addPairings(
       pair(theExtraObject, addClass(addClass(exceptionalPart, graphOne), graphTwo)),
       pair(theExtraObject, graphThree))
-    [by forall_elim(theExtraObject, addClass(addClass(exceptionalPart, graphOne), graphTwo), graphThree) additivity]
+    [by apply_at(theExtraObject, addClass(addClass(exceptionalPart, graphOne), graphTwo), graphThree) additivity]
   @split-off-graph-two |
     pair(theExtraObject, addClass(addClass(exceptionalPart, graphOne), graphTwo))
       = addPairings(
       pair(theExtraObject, addClass(exceptionalPart, graphOne)),
       pair(theExtraObject, graphTwo))
-    [by forall_elim(theExtraObject, addClass(exceptionalPart, graphOne), graphTwo) additivity]
+    [by apply_at(theExtraObject, addClass(exceptionalPart, graphOne), graphTwo) additivity]
   @split-off-graph-one |
     pair(theExtraObject, addClass(exceptionalPart, graphOne))
       = addPairings(
       pair(theExtraObject, exceptionalPart),
       pair(theExtraObject, graphOne))
-    [by forall_elim(theExtraObject, exceptionalPart, graphOne) additivity]
+    [by apply_at(theExtraObject, exceptionalPart, graphOne) additivity]
   // substitute the two inner splits into the outer one, left-nesting the three graph terms:
   @split-with-two-inner |
     pair(theExtraObject,
@@ -339,7 +339,7 @@ proof
     sumOverGraphs(theExtraObject)
       = addPairings(addPairings(pair(theExtraObject, graphOne),
       pair(theExtraObject, graphTwo)), pair(theExtraObject, graphThree))
-    [by forall_elim(theExtraObject) the-graph-sum-definition]
+    [by apply_at(theExtraObject) the-graph-sum-definition]
   @the-group-laws |
     forall x: Class; forall y: Class; forall z: Class;
       addPairings(addPairings(x, y), z) = addPairings(x, addPairings(y, z)) and
@@ -359,7 +359,7 @@ proof
       negPairing(pair(theExtraObject, exceptionalPart))) = zeroPairing and
       addPairings(pair(theExtraObject, exceptionalPart), pair(theExtraObject, graphOne))
       = addPairings(pair(theExtraObject, graphOne), pair(theExtraObject, exceptionalPart))
-    [by forall_elim(pair(theExtraObject, exceptionalPart), pair(theExtraObject, graphOne), pair(theExtraObject, graphTwo)) the-group-laws]
+    [by apply_at(pair(theExtraObject, exceptionalPart), pair(theExtraObject, graphOne), pair(theExtraObject, graphTwo)) the-group-laws]
   @regroup-inner |
     addPairings(addPairings(pair(theExtraObject, exceptionalPart),
       pair(theExtraObject, graphOne)), pair(theExtraObject, graphTwo))
@@ -381,7 +381,7 @@ proof
       addPairings(pair(theExtraObject, graphOne), pair(theExtraObject, graphTwo)))
       = addPairings(addPairings(pair(theExtraObject, graphOne),
       pair(theExtraObject, graphTwo)), pair(theExtraObject, exceptionalPart))
-    [by forall_elim(pair(theExtraObject, exceptionalPart), addPairings(pair(theExtraObject, graphOne), pair(theExtraObject, graphTwo)), pair(theExtraObject, graphThree)) the-group-laws]
+    [by apply_at(pair(theExtraObject, exceptionalPart), addPairings(pair(theExtraObject, graphOne), pair(theExtraObject, graphTwo)), pair(theExtraObject, graphThree)) the-group-laws]
   @regroup-outer |
     addPairings(addPairings(pair(theExtraObject, exceptionalPart),
       addPairings(pair(theExtraObject, graphOne), pair(theExtraObject, graphTwo))),
@@ -441,13 +441,13 @@ proof
       @conclusion-they-differ |
         addPairings(pair(theExtraObject, exceptionalPart), sumOverGraphs(theExtraObject))
           != sumOverGraphs(theExtraObject)
-        [by not_intro given-they-were-equal the-exceptional-term-would-vanish the-exceptional-term-is-also-nonzero]
+        [by contradiction given-they-were-equal the-exceptional-term-would-vanish the-exceptional-term-is-also-nonzero]
     }
   @conclusion |
     pair(theExtraObject, exceptionalPart) != zeroPairing ->
       addPairings(pair(theExtraObject, exceptionalPart), sumOverGraphs(theExtraObject))
       != sumOverGraphs(theExtraObject)
-    [by implies_intro given-the-exceptional-term-is-nonzero]
+    [by discharge given-the-exceptional-term-is-nonzero]
 qed
 
 // §10.7's contradiction, PROVED: the detected class and the determined form pair DIFFERENTLY
@@ -502,6 +502,6 @@ proof
     }
   @conclusion |
     not inTheSpanOfThePolarizationPowers(theDetectedClass)
-    [by not_intro given-in-the-span the-pairings-would-agree but-the-pairings-differ]
+    [by contradiction given-in-the-span the-pairings-would-agree but-the-pairings-differ]
 qed
 ```

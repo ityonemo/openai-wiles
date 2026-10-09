@@ -80,7 +80,7 @@ proof
     }
   @conclusion |
     forall l: Link; traceSign(stabilize(stabilize(l)), stabilize(l)) = neg(ONE)
-    [by forall_intro generalize-l]
+    [by generalize generalize-l]
 qed
 ```
 
@@ -183,7 +183,7 @@ proof
     [by definition(0) insertedTotal]
   @conclusion |
     insertedTotal(neg(initialIndex)) = mul(neg(initialIndex), theReverseTraceSign)
-    [by forall_elim(neg(initialIndex)) the-total-is-n-times-the-sign]
+    [by apply_at(neg(initialIndex)) the-total-is-n-times-the-sign]
 qed
 
 // This chain's sign, read off its traces module.
@@ -277,7 +277,7 @@ proof
     }
   @conclusion |
     theSignedDoubleCount(neg(initialIndex)) != ZERO
-    [by not_intro given-it-were-zero zero-is-below-zero nothing-is-below-itself]
+    [by contradiction given-it-were-zero zero-is-below-zero nothing-is-below-itself]
 qed
 
 // LEMMA 3.6 CANNOT BE PROVED IN THIS CHAIN, and that is the whole point of the wrong/right

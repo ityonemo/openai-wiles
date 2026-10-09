@@ -60,7 +60,7 @@ proof
     }
   @conclusion |
     forall a: F2; add(ZED, a) = a
-    [by forall_intro generalize-a]
+    [by generalize generalize-a]
 qed
 
 // ONE is a left unit for multiplication.
@@ -80,7 +80,7 @@ proof
     }
   @conclusion |
     forall a: F2; mul(ONE, a) = a
-    [by forall_intro generalize-a]
+    [by generalize generalize-a]
 qed
 
 // ZED absorbs on the left.
@@ -100,7 +100,7 @@ proof
     }
   @conclusion |
     forall a: F2; mul(ZED, a) = ZED
-    [by forall_intro generalize-a]
+    [by generalize generalize-a]
 qed
 
 // IDEMPOTENCE: every element squares to itself — the identity that collapses the paper's
@@ -143,7 +143,7 @@ proof
     }
   @conclusion |
     forall a: F2; mul(a, a) = a
-    [by forall_intro generalize-a]
+    [by generalize generalize-a]
 qed
 
 // CANCELLATION as the paper uses it: x + x vanishes, so a term appearing TWICE drops out.
@@ -173,11 +173,11 @@ proof
         }
       @discharge-b |
         forall b: F2; add(add(a, b), b) = a
-        [by forall_intro generalize-b]
+        [by generalize generalize-b]
     }
   @conclusion |
     forall a, b: F2; add(add(a, b), b) = a
-    [by forall_intro generalize-a]
+    [by generalize generalize-a]
 qed
 
 // EXHAUSTION AS A SCHEMA: a one-variable F2 claim follows from its two instances. An
@@ -226,15 +226,15 @@ proof
             }
           @conclusion-everywhere |
             forall a: F2; prop(a)
-            [by forall_intro generalize-a]
+            [by generalize generalize-a]
         }
       @conclusion-one-gives |
         prop(ONE) -> forall a: F2; prop(a)
-        [by implies_intro given-at-one]
+        [by discharge given-at-one]
     }
   @conclusion |
     prop(ZED) -> prop(ONE) -> forall a: F2; prop(a)
-    [by implies_intro given-at-zero]
+    [by discharge given-at-zero]
 qed
 
 // VERIFYING the schema — it is only checked at an instantiation. Idempotence again, this time

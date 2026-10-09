@@ -55,7 +55,7 @@ proof
     [by cite theEigenvaluesAreNonrealConjugates]
   @the-minus-is-the-conjugate |
     lambdaMinus = conj(lambdaPlus)
-    [by and_elim_left the-eigenvalue-facts]
+    [by and_lhs the-eigenvalue-facts]
   @given-they-agree |
     assume lambdaPlus = lambdaMinus {
       @they-agree |
@@ -73,7 +73,7 @@ proof
     }
   @conclusion |
     lambdaPlus != lambdaMinus
-    [by not_intro given-they-agree the-plus-is-real the-plus-is-also-not-real]
+    [by contradiction given-they-agree the-plus-is-real the-plus-is-also-not-real]
 qed
 ```
 
@@ -99,10 +99,10 @@ proof
             [by hypothesis given-both]
           @the-plus-is-r |
             lambdaPlus = r
-            [by and_elim_left both-hold]
+            [by and_lhs both-hold]
           @the-minus-is-r |
             lambdaMinus = r
-            [by and_elim_right both-hold]
+            [by and_rhs both-hold]
           @the-eigenvalues-agree |
             lambdaPlus = lambdaMinus
             [by rewrite the-minus-is-r the-plus-is-r]
@@ -112,11 +112,11 @@ proof
         }
       @conclusion-at-r |
         not (lambdaPlus = r and lambdaMinus = r)
-        [by not_intro given-both the-eigenvalues-agree the-eigenvalues-also-differ]
+        [by contradiction given-both the-eigenvalues-agree the-eigenvalues-also-differ]
     }
   @conclusion |
     forall r: Complex; not (lambdaPlus = r and lambdaMinus = r)
-    [by forall_intro generalize-r]
+    [by generalize generalize-r]
 qed
 ```
 
@@ -251,7 +251,7 @@ proof
                       @the-equivalence-here |
                         isProportional(p, w, pullback(theConjugation, w)) iff
                           (exists r: Complex; pullback(theConjugation, w) = scaleClass(r, w))
-                        [by forall_elim(p, w, pullback(theConjugation, w)) proportionality-means-a-scalar-multiple]
+                        [by apply_at(p, w, pullback(theConjugation, w)) proportionality-means-a-scalar-multiple]
                       @a-scalar-exists |
                         exists r: Complex; pullback(theConjugation, w) = scaleClass(r, w)
                         [using tautology the-equivalence-here they-are-proportional]
@@ -260,10 +260,10 @@ proof
                         [using specialize bothComponentsAreNonzero(p, w) p-is-in-the-parameter-set w-is-nonzero]
                       @the-plus-component-is-nonzero |
                         plusComponent(w) != ZEROCOMPLEX
-                        [by and_elim_left both-components-nonzero]
+                        [by and_lhs both-components-nonzero]
                       @the-minus-component-is-nonzero |
                         minusComponent(w) != ZEROCOMPLEX
-                        [by and_elim_right both-components-nonzero]
+                        [by and_rhs both-components-nonzero]
                       @the-conjugation-acts |
                         plusComponent(pullback(theConjugation, w))
                           = mulComplex(lambdaPlus, plusComponent(w)) and
@@ -273,11 +273,11 @@ proof
                       @the-plus-action |
                         plusComponent(pullback(theConjugation, w))
                           = mulComplex(lambdaPlus, plusComponent(w))
-                        [by and_elim_left the-conjugation-acts]
+                        [by and_lhs the-conjugation-acts]
                       @the-minus-action |
                         minusComponent(pullback(theConjugation, w))
                           = mulComplex(lambdaMinus, minusComponent(w))
-                        [by and_elim_right the-conjugation-acts]
+                        [by and_rhs the-conjugation-acts]
                       @with-the-scalar |
                         unpack r: Complex from a-scalar-exists {
                           @the-pullback-is-a-multiple |
@@ -289,10 +289,10 @@ proof
                             [using specialize theProjectionsAreLinear(r, w)]
                           @the-plus-of-the-multiple |
                             plusComponent(scaleClass(r, w)) = mulComplex(r, plusComponent(w))
-                            [by and_elim_left the-projections-are-linear-at-r]
+                            [by and_lhs the-projections-are-linear-at-r]
                           @the-minus-of-the-multiple |
                             minusComponent(scaleClass(r, w)) = mulComplex(r, minusComponent(w))
-                            [by and_elim_right the-projections-are-linear-at-r]
+                            [by and_rhs the-projections-are-linear-at-r]
                           @the-plus-reads-both-ways |
                             mulComplex(lambdaPlus, plusComponent(w))
                               = mulComplex(r, plusComponent(w))
@@ -309,45 +309,45 @@ proof
                             [using specialize complexCancellation(lambdaMinus, r, minusComponent(w)) the-minus-component-is-nonzero the-minus-reads-both-ways]
                           @both-eigenvalues-are-r |
                             lambdaPlus = r and lambdaMinus = r
-                            [by and_intro the-plus-eigenvalue-is-r the-minus-eigenvalue-is-r]
+                            [by both the-plus-eigenvalue-is-r the-minus-eigenvalue-is-r]
                           @conclusion-a-scalar-is-both |
                             exists s: Complex; lambdaPlus = s and lambdaMinus = s
-                            [by exists_intro(r) both-eigenvalues-are-r]
+                            [by witness(r) both-eigenvalues-are-r]
                         }
                       @conclusion-some-scalar-is-both |
                         exists s: Complex; lambdaPlus = s and lambdaMinus = s
-                        [by exists_elim with-the-scalar]
+                        [by unpacked with-the-scalar]
                     }
                   @conclusion-proportional-gives |
                     isProportional(p, w, pullback(theConjugation, w)) ->
                       (exists r: Complex; lambdaPlus = r and lambdaMinus = r)
-                    [by implies_intro given-proportional]
+                    [by discharge given-proportional]
                 }
               @conclusion-nonzero-gives |
                 (not isZeroClass(w)) ->
                   isProportional(p, w, pullback(theConjugation, w)) ->
                   (exists r: Complex; lambdaPlus = r and lambdaMinus = r)
-                [by implies_intro given-w-nonzero]
+                [by discharge given-w-nonzero]
             }
           @conclusion-at-w |
             inParameterSet(p) -> (not isZeroClass(w)) ->
               isProportional(p, w, pullback(theConjugation, w)) ->
               (exists r: Complex; lambdaPlus = r and lambdaMinus = r)
-            [by implies_intro given-p-in-the-parameter-set]
+            [by discharge given-p-in-the-parameter-set]
         }
       @discharge-w |
         forall w: WeilClass;
           inParameterSet(p) -> (not isZeroClass(w)) ->
           isProportional(p, w, pullback(theConjugation, w)) ->
           (exists r: Complex; lambdaPlus = r and lambdaMinus = r)
-        [by forall_intro generalize-w]
+        [by generalize generalize-w]
     }
   @conclusion |
     forall p: Period; forall w: WeilClass;
       inParameterSet(p) -> (not isZeroClass(w)) ->
       isProportional(p, w, pullback(theConjugation, w)) ->
       (exists r: Complex; lambdaPlus = r and lambdaMinus = r)
-    [by forall_intro generalize-p]
+    [by generalize generalize-p]
 qed
 
 // §12.4's identification of "independent" with "spans", now a THEOREM off the definition.
@@ -373,36 +373,36 @@ proof
                         [by hypothesis given-not-proportional]
                       @the-equivalence-at-these |
                         spansTheWeilPlane(p, v, w) iff (not isProportional(p, v, w))
-                        [by forall_elim(p, v, w) spanning-is-non-proportionality]
+                        [by apply_at(p, v, w) spanning-is-non-proportionality]
                       @conclusion-they-span |
                         spansTheWeilPlane(p, v, w)
                         [using tautology the-equivalence-at-these they-are-not-proportional]
                     }
                   @conclusion-non-proportional-gives |
                     (not isProportional(p, v, w)) -> spansTheWeilPlane(p, v, w)
-                    [by implies_intro given-not-proportional]
+                    [by discharge given-not-proportional]
                 }
               @conclusion-at-w |
                 inParameterSet(p) -> (not isProportional(p, v, w)) ->
                   spansTheWeilPlane(p, v, w)
-                [by implies_intro given-p-in-the-parameter-set]
+                [by discharge given-p-in-the-parameter-set]
             }
           @discharge-w |
             forall w: WeilClass;
               inParameterSet(p) -> (not isProportional(p, v, w)) ->
               spansTheWeilPlane(p, v, w)
-            [by forall_intro generalize-w]
+            [by generalize generalize-w]
         }
       @discharge-v |
         forall v: WeilClass; forall w: WeilClass;
           inParameterSet(p) -> (not isProportional(p, v, w)) ->
           spansTheWeilPlane(p, v, w)
-        [by forall_intro generalize-v]
+        [by generalize generalize-v]
     }
   @conclusion |
     forall p: Period; forall v: WeilClass; forall w: WeilClass;
       inParameterSet(p) -> (not isProportional(p, v, w)) -> spansTheWeilPlane(p, v, w)
-    [by forall_intro generalize-p]
+    [by generalize generalize-p]
 qed
 
 // THE PAPER'S CONCLUSION, PROVED from the eigenvalue computation above. Were w and its
@@ -448,14 +448,14 @@ proof
                         }
                       @the-class-would-be-zero |
                         isZeroClass(w)
-                        [by exists_elim with-the-scalar]
+                        [by unpacked with-the-scalar]
                       @the-class-is-also-nonzero |
                         not isZeroClass(w)
                         [by hypothesis given-w-nonzero]
                     }
                   @they-are-not-proportional |
                     not isProportional(p, w, pullback(theConjugation, w))
-                    [by not_intro given-they-were-proportional the-class-would-be-zero the-class-is-also-nonzero]
+                    [by contradiction given-they-were-proportional the-class-would-be-zero the-class-is-also-nonzero]
                   @conclusion-the-pair-spans |
                     spansTheWeilPlane(p, w, pullback(theConjugation, w))
                     [using specialize nonProportionalClassesSpan(p, w, pullback(theConjugation, w)) p-is-in-the-parameter-set they-are-not-proportional]
@@ -463,23 +463,23 @@ proof
               @conclusion-nonzero-gives |
                 (not isZeroClass(w)) ->
                   spansTheWeilPlane(p, w, pullback(theConjugation, w))
-                [by implies_intro given-w-nonzero]
+                [by discharge given-w-nonzero]
             }
           @conclusion-at-w |
             inParameterSet(p) -> (not isZeroClass(w)) ->
               spansTheWeilPlane(p, w, pullback(theConjugation, w))
-            [by implies_intro given-p-in-the-parameter-set]
+            [by discharge given-p-in-the-parameter-set]
         }
       @discharge-w |
         forall w: WeilClass;
           inParameterSet(p) -> (not isZeroClass(w)) ->
           spansTheWeilPlane(p, w, pullback(theConjugation, w))
-        [by forall_intro generalize-w]
+        [by generalize generalize-w]
     }
   @conclusion |
     forall p: Period; forall w: WeilClass;
       inParameterSet(p) -> (not isZeroClass(w)) ->
       spansTheWeilPlane(p, w, pullback(theConjugation, w))
-    [by forall_intro generalize-p]
+    [by generalize generalize-p]
 qed
 ```

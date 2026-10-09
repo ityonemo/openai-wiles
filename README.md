@@ -36,7 +36,7 @@ proof
     }
   @conclusion |
     not isAScalarGraph(theExtraObject)
-    [by not_intro given-it-were-a-scalar-graph then-it-annihilates but-it-detects]
+    [by contradiction given-it-were-a-scalar-graph then-it-annihilates but-it-detects]
 qed
 ```
 
