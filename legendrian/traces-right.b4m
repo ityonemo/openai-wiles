@@ -21,6 +21,7 @@ const ZERO = integer.ZERO
 const ONE = integer.ONE
 func neg = integer.neg
 func add = integer.add
+func mul = integer.mul
 
 // `stabilize(L)` is the U-stabilization of L ([6] §2.1).
 func stabilize(l: Link) => Link
@@ -77,5 +78,62 @@ hole forwardTraceSign cites "arXiv:1303.0588v2 Lemma 3.4 + proof p.14: I(G1) = (
 // MISMATCH between [6]'s index I and the manuscript's signed double-point count. That
 // alternative is `traces-wrong.b4m`. Neither file adjudicates the question; between them they
 // show it is the hinge.
-hole reverseTraceSign cites "arXiv:1303.0588v2 Lemma 3.4 + proof p.14: I(G2) = (-1)^k, G2 going phi_1 -> phi. DISPUTED: OpenAI's withdrawal notice says -1 in the manuscript's convention": forall l: Link;
+hole reverseTraceSign cites "arXiv:1303.0588v2 Lemma 3.4 + proof p.14 gives I(G2) = (-1)^k for G2 going phi_1 -> phi; OpenAI's withdrawal notice states the sign is the opposite in the manuscript's own convention. The two chains of this directory take the two values": forall l: Link;
   traceSign(stabilize(l), l) = ONE
+
+// -- the sign, exported for the shared §3.4 file -------------------------------------------
+//
+// `theReverseTraceSignValue` is THIS module's value for a reverse trace. The §3.4 file is
+// written against this name and is byte-identical in both chains; only the value differs,
+// so a reader must follow the arithmetic rather than read an answer off a theorem name.
+const theReverseTraceSignValue: Int
+
+// [6]'s value.
+hole theReverseTraceSignValueIs
+  cites "see reverseTraceSign above — this names its value so the shared §3.4 file can be chain-neutral":
+  theReverseTraceSignValue = ONE
+
+theorem theReverseTraceSignIsItsValue: forall l: Link;
+  traceSign(stabilize(l), l) = theReverseTraceSignValue
+proof
+  @the-value |
+    theReverseTraceSignValue = ONE
+    [by cite theReverseTraceSignValueIs]
+  @generalize-l |
+    fix l: Link {
+      @the-trace-at-l |
+        traceSign(stabilize(l), l) = ONE
+        [using specialize reverseTraceSign(l)]
+      @conclusion-at-l |
+        traceSign(stabilize(l), l) = theReverseTraceSignValue
+        [by rewrite the-value the-trace-at-l]
+    }
+  @conclusion |
+    forall l: Link; traceSign(stabilize(l), l) = theReverseTraceSignValue
+    [by generalize generalize-l]
+qed
+
+// THE ARITHMETIC THIS CHAIN'S SIGN PRODUCES, for the shared §3.4 file.
+//
+// m inserted reverse traces at sign s contribute m*s, so the count is I(f1) + (-I(f1))*s.
+// §3.4 claims that is ZERO. Whether it is depends on s, which is why this theorem lives in
+// the per-chain module: with s = +1 it holds, with s = -1 the kernel refuses it.
+theorem theSignMakesTheCountVanish: forall i: Int;
+  add(i, mul(neg(i), theReverseTraceSignValue)) = ZERO
+proof
+  @the-value |
+    theReverseTraceSignValue = ONE
+    [by cite theReverseTraceSignValueIs]
+  @generalize-i |
+    fix i: Int {
+      @the-arithmetic-at-the-value |
+        add(i, mul(neg(i), ONE)) = ZERO
+        [using polynomial(integer)]
+      @conclusion-at-i |
+        add(i, mul(neg(i), theReverseTraceSignValue)) = ZERO
+        [by rewrite the-value the-arithmetic-at-the-value]
+    }
+  @conclusion |
+    forall i: Int; add(i, mul(neg(i), theReverseTraceSignValue)) = ZERO
+    [by generalize generalize-i]
+qed

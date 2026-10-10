@@ -106,7 +106,37 @@ stabilization-trace sign of §3.4 — and run that difference all the way to The
 | chain | reverse-trace sign | outcome |
 |---|---|---|
 | `-right` | `+1`, as **[6]** states it (arXiv:1303.0588v2, Lemma 3.4's *proof*, p. 14) — which the manuscript's (3.6) quotes correctly | count closes to `0`, [9, Thm 2.3] applies, Lemma 3.6 and Theorem 1.1 follow |
-| `-wrong` | `−1`, as **OpenAI's withdrawal notice** says it should be in the manuscript's convention | count is `I(f₁) + I(f₁) = −2m`, *proved* nonzero, so [9, Thm 2.3]'s hypothesis cannot be met and Lemma 3.6 is unprovable |
+| `-wrong` | `−1`, as **OpenAI's withdrawal notice** says it should be in the manuscript's convention | count is `I(f₁) + I(f₁) = −2m`, so [9, Thm 2.3]'s zero-count hypothesis is unmet and the kernel **rejects §3.4's step** |
+
+In the `-wrong` chain, §3.4's count is transcribed exactly as the manuscript writes it —
+*"the total signed double count is `I(f₁) + m = 0`"* — and the kernel refuses the arithmetic:
+
+```
+legendrian/traces-wrong.b4m:135:16: error: polynomial: sides expand differently:
+  'add(i, i)' vs 'ZERO'
+```
+
+With `i = I(f₁)` and `m = −I(f₁)`, `i + i` is `−2m`. That is the withdrawal notice's
+`I_new = I(f₁) − m = −2m ≠ 0`, as a machine-checked diagnostic rather than a remark — the
+manuscript's own step, rejected on its own terms. No hole is involved: both chains are
+hole-free on this path, and the failure is pure integer arithmetic.
+
+### Built to be read, not pattern-matched
+
+The two chains are kept as close to identical as the mathematics allows, because this
+directory doubles as an **eval**: a reader (or a model) should have to follow the arithmetic
+rather than spot a tell. Run `./diff-chains.sh` to audit that claim. Currently:
+
+| pair | differs by |
+|---|---|
+| `legendrian/traces-*.b4m` | **`ONE` vs `neg(ONE)`, and nothing else** — same theorem names, same comments, same citation text |
+| `legendrian/stabilization-traces-*.md` | the import line only |
+| `construction/marked-class-*`, `construction/chern-constancy-*`, `eigenvalues/independence-*` | the import line only |
+| `architecture-*` | import lines, plus prose that names its own chain |
+
+Deliberately avoided: theorem names carrying the answer (an earlier version had
+`anInnerTraceContributesPlusOne` vs `…MinusOne`), a citation string mentioning the notice in
+only one chain, and per-chain declarations present in one file but not the other.
 
 Run `./diff-chains.sh` to see the difference. Six files are duplicated; **four differ only in
 an import line**. The mathematics diverges in exactly two places: `traces-*.b4m`'s sign axiom

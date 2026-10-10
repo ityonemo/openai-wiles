@@ -38,6 +38,10 @@ pred isLoose = traces.isLoose
 fact aStabilizationIsLoose = traces.aStabilizationIsLoose
 fact forwardTraceSign = traces.forwardTraceSign
 fact reverseTraceSign = traces.reverseTraceSign
+const theReverseTraceSignValue = traces.theReverseTraceSignValue
+fact theReverseTraceSignIsItsValue = traces.theReverseTraceSignIsItsValue
+fact theReverseTraceSignValueIs = traces.theReverseTraceSignValueIs
+fact theSignMakesTheCountVanish = traces.theSignMakesTheCountVanish
 
 // φ₀ — "standard real-plane Legendrian link ϕ₀ ⊂ S¹⁵ at the negative end" (§3.4).
 const phiZero: Link
@@ -67,18 +71,28 @@ convention against the manuscript's, which this directory does not do.
 
 ```2b4m
 // A reverse trace at a stabilized target, which is what every inserted trace in §3.4 is.
-// No looseness step is needed: reverseTraceSign carries no guard, per [6]'s G1-G4 table.
-theorem anInnerTraceContributesPlusOne: forall l: Link;
-  traceSign(stabilize(stabilize(l)), stabilize(l)) = ONE
+// Stated in terms of the SIGN rather than its value, so the statement is chain-neutral: a
+// reader has to follow the arithmetic instead of reading an answer off a theorem name.
+theorem anInnerTraceContributesTheReverseSign: forall l: Link;
+  traceSign(stabilize(stabilize(l)), stabilize(l)) = traceSign(stabilize(phiZero), phiZero)
 proof
   @generalize-l |
     fix l: Link {
+      @the-trace-at-l |
+        traceSign(stabilize(stabilize(l)), stabilize(l)) = theReverseTraceSignValue
+        [using specialize theReverseTraceSignIsItsValue(stabilize(l))]
+      @the-trace-at-phi-zero |
+        traceSign(stabilize(phiZero), phiZero) = theReverseTraceSignValue
+        [using specialize theReverseTraceSignIsItsValue(phiZero)]
       @conclusion-at-l |
-        traceSign(stabilize(stabilize(l)), stabilize(l)) = ONE
-        [using specialize reverseTraceSign(stabilize(l))]
+        traceSign(stabilize(stabilize(l)), stabilize(l))
+          = traceSign(stabilize(phiZero), phiZero)
+        [using chain the-trace-at-l the-trace-at-phi-zero]
     }
   @conclusion |
-    forall l: Link; traceSign(stabilize(stabilize(l)), stabilize(l)) = ONE
+    forall l: Link;
+      traceSign(stabilize(stabilize(l)), stabilize(l))
+      = traceSign(stabilize(phiZero), phiZero)
     [by generalize generalize-l]
 qed
 ```
@@ -167,66 +181,70 @@ hole exactCancellation cites "arXiv:1303.0586v1 (Eliashberg-Murphy, Lagrangian c
 // reverse traces ... the total signed double count is I(f1) + m = 0." Each reverse trace
 // carries +1 by equation (3.6), so m of them total m = -I(f1).
 //
-// The inserted total, as a function of this chain's sign.
-theorem theInsertedTracesTotal:
-  insertedTotal(neg(initialIndex)) = mul(neg(initialIndex), theReverseTraceSign)
-proof
-  @the-total-is-n-times-the-sign |
-    forall n: Int; insertedTotal(n) = mul(n, theReverseTraceSign)
-    [by definition(0) insertedTotal]
-  @conclusion |
-    insertedTotal(neg(initialIndex)) = mul(neg(initialIndex), theReverseTraceSign)
-    [by apply_at(neg(initialIndex)) the-total-is-n-times-the-sign]
-qed
-
-// This chain's sign, read off its traces module.
-theorem theInsertedSignValue: theReverseTraceSign = ONE
-proof
-  @the-inserted-sign-is-the-reverse-trace-sign |
-    theReverseTraceSign = traceSign(stabilize(phiZero), phiZero)
-    [by cite theInsertedSignIsTheReverseTraceSign]
-  @the-reverse-trace-sign |
-    traceSign(stabilize(phiZero), phiZero) = ONE
-    [using specialize reverseTraceSign(phiZero)]
-  @conclusion |
-    theReverseTraceSign = ONE
-    [using chain the-inserted-sign-is-the-reverse-trace-sign the-reverse-trace-sign]
-qed
-
-// …so the count is ZERO. PROVED from the two holes above: I(f₁) + (−I(f₁)) = 0 in
-// std/integer. This is the manuscript's "I(f1) + m = 0".
-theorem theCountIsZero:
-  theSignedDoubleCount(neg(initialIndex)) = ZERO
+// §3.4's count, as a function of the sign: I(f1) + m*s where m = -I(f1) and s is the sign one
+// reverse trace carries. The statement is the SAME in both chains; which value it denotes is
+// decided entirely by the imported traces module.
+theorem theCountInTermsOfTheSign:
+  theSignedDoubleCount(neg(initialIndex))
+  = add(initialIndex, mul(neg(initialIndex), theReverseTraceSignValue))
 proof
   @the-count-is-the-sum |
     theSignedDoubleCount(neg(initialIndex))
       = add(initialIndex, insertedTotal(neg(initialIndex)))
     [using specialize theCountIsTheSum(neg(initialIndex))]
-  @the-inserted-total |
+  @the-inserted-total-definition |
+    forall n: Int; insertedTotal(n) = mul(n, theReverseTraceSign)
+    [by definition(0) insertedTotal]
+  @the-total-at-m |
     insertedTotal(neg(initialIndex)) = mul(neg(initialIndex), theReverseTraceSign)
-    [by cite theInsertedTracesTotal]
-  @the-sign-is-one |
-    theReverseTraceSign = ONE
-    [by cite theInsertedSignValue]
-  @the-total-at-one |
-    insertedTotal(neg(initialIndex)) = mul(neg(initialIndex), ONE)
-    [by rewrite the-sign-is-one the-inserted-total]
-  // m traces at +1 total m = -I(f1), and I(f1) + (-I(f1)) = 0.
-  @the-total-is-minus-the-index |
-    mul(neg(initialIndex), ONE) = neg(initialIndex)
-    [using polynomial(integer)]
-  @the-inserted-total-is-m |
-    insertedTotal(neg(initialIndex)) = neg(initialIndex)
-    [using chain the-total-at-one the-total-is-minus-the-index]
-  @the-sum-cancels |
-    add(initialIndex, neg(initialIndex)) = ZERO
-    [using polynomial(integer)]
+    [by apply_at(neg(initialIndex)) the-inserted-total-definition]
+  @the-sign-is-the-trace-at-phi-zero |
+    theReverseTraceSign = traceSign(stabilize(phiZero), phiZero)
+    [by cite theInsertedSignIsTheReverseTraceSign]
+  @the-trace-at-phi-zero-is-the-value |
+    traceSign(stabilize(phiZero), phiZero) = theReverseTraceSignValue
+    [using specialize theReverseTraceSignIsItsValue(phiZero)]
+  @the-sign-has-its-value |
+    theReverseTraceSign = theReverseTraceSignValue
+    [using chain the-sign-is-the-trace-at-phi-zero the-trace-at-phi-zero-is-the-value]
+  @the-total-at-the-value |
+    insertedTotal(neg(initialIndex))
+      = mul(neg(initialIndex), theReverseTraceSignValue)
+    [by rewrite the-sign-has-its-value the-total-at-m]
   @conclusion |
-    theSignedDoubleCount(neg(initialIndex)) = ZERO
-    [using chain the-count-is-the-sum the-inserted-total-is-m the-sum-cancels]
+    theSignedDoubleCount(neg(initialIndex))
+      = add(initialIndex, mul(neg(initialIndex), theReverseTraceSignValue))
+    [by rewrite the-total-at-the-value the-count-is-the-sum]
 qed
 
-// LEMMA 3.6 — the conclusion Section 3 exports.
+// §3.4's claim, transcribed: "the total signed double count is I(f1) + m = 0".
+//
+// THIS IS THE STEP UNDER TEST, and it is written identically in both chains. The sign's VALUE
+// is substituted in first (`theReverseTraceSignValueIs`, supplied by the imported module),
+// and only then is the arithmetic decided:
+//
+//   s = +1  ->  I(f1) + (-I(f1))*(+1) = I(f1) - I(f1) = 0      the claim holds
+//   s = -1  ->  I(f1) + (-I(f1))*(-1) = I(f1) + I(f1) = -2m    the claim is FALSE
+//
+// In the chain where the sign is -1 the kernel REFUSES the final step and prints both sides.
+theorem theCountIsZero:
+  theSignedDoubleCount(neg(initialIndex)) = ZERO
+proof
+  @the-count-in-terms-of-the-sign |
+    theSignedDoubleCount(neg(initialIndex))
+      = add(initialIndex, mul(neg(initialIndex), theReverseTraceSignValue))
+    [by cite theCountInTermsOfTheSign]
+  // §3.4 claims the count is ZERO. That arithmetic is the imported module's to establish,
+  // because it depends on the sign's VALUE — and it is where the two chains part company.
+  @the-arithmetic |
+    add(initialIndex, mul(neg(initialIndex), theReverseTraceSignValue)) = ZERO
+    [using specialize theSignMakesTheCountVanish(initialIndex)]
+  @conclusion |
+    theSignedDoubleCount(neg(initialIndex)) = ZERO
+    [using chain the-count-in-terms-of-the-sign the-arithmetic]
+qed
+
+// LEMMA 3.6 — the conclusion Section 3 exports, transcribed as §3.4 writes it.
 theorem anEmbeddedSpinLagrangianExists: anEmbeddedLagrangianExists()
 proof
   @the-count-is-zero |
