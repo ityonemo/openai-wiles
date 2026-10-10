@@ -137,7 +137,8 @@ func insertedTotal(n: Int) => Int:
   insertedTotal(n) = mul(n, theReverseTraceSign)
 
 // The inserted traces of §3.4 are reverse traces at stabilized targets, so each carries
-// `reverseTraceSign`'s value — +1 in the right chain, -1 in the wrong one.
+// `reverseTraceSign`'s value — -1 in the `-right` chain (the correct sign), +1 in the
+// `-wrong` one (the manuscript's).
 hole theInsertedSignIsTheReverseTraceSign
   cites "manuscript §3.4: Insert m reverse traces in separated radial collars near the puncture, ordered from the m-fold stabilization phi_m at the innermost end to phi_0 outward":
   theReverseTraceSign = traceSign(stabilize(phiZero), phiZero)

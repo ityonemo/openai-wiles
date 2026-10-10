@@ -2,8 +2,8 @@
 # Diff the right/wrong chains of the openai-wiles formalization.
 #
 # The two chains differ in exactly ONE mathematical input: the reverse stabilization-trace
-# sign. `traces-right.b4m` carries [6]'s value (+1, as arXiv:1303.0588v2 Lemma 3.4's proof
-# states it); `traces-wrong.b4m` carries the value OpenAI's withdrawal notice says is correct
+# sign. `traces-wrong.b4m` carries [6]'s value (+1, as arXiv:1303.0588v2 Lemma 3.4's proof
+# states it); `traces-right.b4m` carries the value OpenAI's withdrawal notice says is correct
 # in the manuscript's convention (-1). Every other file in each chain is a copy, duplicated
 # only because `import` names a fixed path and a shared file cannot choose its dependency.
 #
@@ -52,6 +52,6 @@ if [ "$rc" = 0 ]; then
   echo " so swapping the sign module changed nothing and both chains passed.)"
 else
   echo "Verify the split is real:"
-  echo "  2b4m check architecture-right.md theWeilPlaneIsSpannedByAlgebraicClasses  # PASSES"
-  echo "  2b4m check architecture-wrong.md theWeilPlaneIsSpannedByAlgebraicClasses  # FAILS at Lemma 3.6"
+  echo "  2b4m check architecture-right.md theWeilPlaneIsSpannedByAlgebraicClasses  # FAILS: count is -2m"
+  echo "  2b4m check architecture-wrong.md theWeilPlaneIsSpannedByAlgebraicClasses  # PASSES: reproduces the bug"
 fi

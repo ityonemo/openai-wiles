@@ -85,8 +85,8 @@ git clone https://github.com/ityonemo/2b4m && (cd 2b4m && zig build)
 export B4M_STD_DIR=$PWD/2b4m/std
 export PATH=$PWD/2b4m/zig-out/bin:$PATH
 
-2b4m check architecture-right.md theWeilPlaneIsSpannedByAlgebraicClasses   # OK
-2b4m check architecture-wrong.md theWeilPlaneIsSpannedByAlgebraicClasses   # error at Lemma 3.6
+2b4m check architecture-right.md theWeilPlaneIsSpannedByAlgebraicClasses   # error: the count is -2m
+2b4m check architecture-wrong.md theWeilPlaneIsSpannedByAlgebraicClasses   # OK (reproduces the bug)
 2b4m check signs.md                                                        # Section 6's signs
 ./diff-chains.sh                                                           # what differs
 ```
@@ -99,20 +99,24 @@ It exists as **two chains** that differ in exactly one mathematical input — th
 stabilization-trace sign of §3.4 — and run that difference all the way to Theorem 1.1.
 
 ```
-2b4m check architecture-right.md theWeilPlaneIsSpannedByAlgebraicClasses  # PASSES
-2b4m check architecture-wrong.md theWeilPlaneIsSpannedByAlgebraicClasses  # FAILS
+2b4m check architecture-right.md theWeilPlaneIsSpannedByAlgebraicClasses  # FAILS — correct sign
+2b4m check architecture-wrong.md theWeilPlaneIsSpannedByAlgebraicClasses  # PASSES — the bug
 ```
 
 | chain | reverse-trace sign | outcome |
 |---|---|---|
-| `-right` | `+1`, as **[6]** states it (arXiv:1303.0588v2, Lemma 3.4's *proof*, p. 14) — which the manuscript's (3.6) quotes correctly | count closes to `0`, [9, Thm 2.3] applies, Lemma 3.6 and Theorem 1.1 follow |
-| `-wrong` | `−1`, as **OpenAI's withdrawal notice** says it should be in the manuscript's convention | count is `I(f₁) + I(f₁) = −2m`, so [9, Thm 2.3]'s zero-count hypothesis is unmet and the kernel **rejects §3.4's step** |
+| `-right` | `−1` — the **correct** sign, per OpenAI's withdrawal notice: the two branches of the standard cusp have opposite source orientations | count is `I(f₁) + I(f₁) = −2m`, so [9, Thm 2.3]'s zero-count hypothesis is unmet and the kernel **rejects §3.4's step** |
+| `-wrong` | `+1` — the manuscript's sign, quoted from [6]'s Lemma 3.4 but in [6]'s own convention | count closes to `0`, [9, Thm 2.3] applies, Lemma 3.6 and Theorem 1.1 follow — **which is the bug** |
 
-In the `-wrong` chain, §3.4's count is transcribed exactly as the manuscript writes it —
+The names say which sign is *correct*, not which chain passes: `-right` carries the right sign
+and therefore FAILS, because the manuscript's argument does not survive it. `-wrong` carries
+the manuscript's sign and passes, reproducing the error.
+
+In the `-right` chain, §3.4's count is transcribed exactly as the manuscript writes it —
 *"the total signed double count is `I(f₁) + m = 0`"* — and the kernel refuses the arithmetic:
 
 ```
-legendrian/traces-wrong.b4m:135:16: error: polynomial: sides expand differently:
+legendrian/traces-right.b4m:135:16: error: polynomial: sides expand differently:
   'add(i, i)' vs 'ZERO'
 ```
 
@@ -163,7 +167,7 @@ itself is decided by it.
 > The Eliashberg–Murphy cancellation theorem invoked at this step requires zero signed
 > double-point count, so its hypothesis is not met.
 
-The `-wrong` chain is that paragraph, machine-checked.
+The `-right` chain is that paragraph, machine-checked.
 
 ## Layout
 
@@ -214,7 +218,7 @@ Every unproved step is a `hole` carrying a citation, so strict `check` passes wh
 each locator:
 
 ```
-2b4m check --axioms architecture-right.md theWeilPlaneIsSpannedByAlgebraicClasses
+2b4m check --axioms architecture-wrong.md theWeilPlaneIsSpannedByAlgebraicClasses
 ```
 
 36 cited holes, drawn from arXiv:1303.0588v2 and arXiv:1303.0586v1, Fulton [14],

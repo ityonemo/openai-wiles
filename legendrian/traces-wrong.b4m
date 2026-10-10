@@ -1,7 +1,7 @@
 // openai-wiles/legendrian/traces-wrong.b4m — reference [6]'s stabilization traces, with the
-// reverse-trace sign AS OPENAI'S WITHDRAWAL NOTICE SAYS IT SHOULD BE: -1.
+// reverse-trace sign AS [6] STATES IT: I(G2) = (-1)^k = +1 at k = 4.
 //
-// This file and `traces-wrong.b4m` differ in EXACTLY ONE VALUE — `reverseTraceSign`'s. They
+// This file and `traces-right.b4m` differ in EXACTLY ONE VALUE — `reverseTraceSign`'s. They
 // are the two horns of the live question about this manuscript, and each is imported by one
 // of the two root files. See either root's header for the mechanism.
 //
@@ -68,22 +68,18 @@ func traceSign(source: Link, target: Link) => Int
 hole forwardTraceSign cites "arXiv:1303.0588v2 Lemma 3.4 + proof p.14: I(G1) = (-1)^{k-1}, G1 going phi -> phi_1": forall l: Link;
   traceSign(l, stabilize(l)) = neg(ONE)
 
-// REVERSE trace, stabilize(l) -> l. UNCONDITIONAL — no looseness hypothesis, per the G1-G4
-// table above. The VALUE is where this file differs from `traces-right.b4m`.
+// REVERSE trace, stabilize(l) -> l: [6]'s G2, sign (-1)^k = +1 at k = 4. UNCONDITIONAL —
+// no looseness hypothesis, per the G1-G4 table above.
 //
-// THE SIGN AS THE WITHDRAWAL NOTICE GIVES IT. Verbatim:
+// THE SIGN AS [6] STATES IT, read off Lemma 3.4's proof (the G1-G4 table above). The
+// manuscript's equation (3.6) quotes this correctly.
 //
-//   "The proof assigns each reverse stabilization trace sign +1 and therefore claims that
-//    inserting m such traces makes the signed count zero. Accounting for the opposite source
-//    orientations of the two branches of the standard cusp gives sign -1 for each reverse
-//    trace in this convention. The resulting count is therefore I_new = I(f1) - m = -2m != 0."
-//
-// Note what this is NOT: it is not a claim that [6] is wrong. [6] assigns I(G2) = (-1)^k = +1
-// in ITS OWN convention (the G1-G4 table above), and the manuscript quotes that correctly.
-// The notice asserts a CONVENTION MISMATCH between [6]'s index I and the manuscript's signed
-// double-point count. `traces-right.b4m` takes [6]'s value; this file takes the notice's.
+// OpenAI's withdrawal notice disputes it — not as an error inside [6], but as a CONVENTION
+// MISMATCH between [6]'s index I and the manuscript's signed double-point count. That
+// alternative is `traces-right.b4m`. Neither file adjudicates the question; between them they
+// show it is the hinge.
 hole reverseTraceSign cites "arXiv:1303.0588v2 Lemma 3.4 + proof p.14 gives I(G2) = (-1)^k for G2 going phi_1 -> phi; OpenAI's withdrawal notice states the sign is the opposite in the manuscript's own convention. The two chains of this directory take the two values": forall l: Link;
-  traceSign(stabilize(l), l) = neg(ONE)
+  traceSign(stabilize(l), l) = ONE
 
 // -- the sign, exported for the shared §3.4 file -------------------------------------------
 //
@@ -92,21 +88,21 @@ hole reverseTraceSign cites "arXiv:1303.0588v2 Lemma 3.4 + proof p.14 gives I(G2
 // so a reader must follow the arithmetic rather than read an answer off a theorem name.
 const theReverseTraceSignValue: Int
 
-// the notice's value.
+// [6]'s value.
 hole theReverseTraceSignValueIs
   cites "see reverseTraceSign above — this names its value so the shared §3.4 file can be chain-neutral":
-  theReverseTraceSignValue = neg(ONE)
+  theReverseTraceSignValue = ONE
 
 theorem theReverseTraceSignIsItsValue: forall l: Link;
   traceSign(stabilize(l), l) = theReverseTraceSignValue
 proof
   @the-value |
-    theReverseTraceSignValue = neg(ONE)
+    theReverseTraceSignValue = ONE
     [by cite theReverseTraceSignValueIs]
   @generalize-l |
     fix l: Link {
       @the-trace-at-l |
-        traceSign(stabilize(l), l) = neg(ONE)
+        traceSign(stabilize(l), l) = ONE
         [using specialize reverseTraceSign(l)]
       @conclusion-at-l |
         traceSign(stabilize(l), l) = theReverseTraceSignValue
@@ -126,12 +122,12 @@ theorem theSignMakesTheCountVanish: forall i: Int;
   add(i, mul(neg(i), theReverseTraceSignValue)) = ZERO
 proof
   @the-value |
-    theReverseTraceSignValue = neg(ONE)
+    theReverseTraceSignValue = ONE
     [by cite theReverseTraceSignValueIs]
   @generalize-i |
     fix i: Int {
       @the-arithmetic-at-the-value |
-        add(i, mul(neg(i), neg(ONE))) = ZERO
+        add(i, mul(neg(i), ONE)) = ZERO
         [using polynomial(integer)]
       @conclusion-at-i |
         add(i, mul(neg(i), theReverseTraceSignValue)) = ZERO
