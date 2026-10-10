@@ -656,6 +656,6 @@ qed
 
 // Proposition 12.3, re-exported from the file that proves it — the detection chain of
 // `../detection/` plus §12.3's cited last move.
-theorem aMarkedAlgebraicClassExistsAtSomeGoodPeriod =
+fact aMarkedAlgebraicClassExistsAtSomeGoodPeriod =
   construction.aMarkedAlgebraicClassExistsAtSomeGoodPeriod
 ```

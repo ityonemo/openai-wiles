@@ -30,7 +30,7 @@ import detection <<< "nonpolarization.md"
 sort Class = detection.Class
 pred inTheSpanOfThePolarizationPowers = detection.inTheSpanOfThePolarizationPowers
 const theDetectedClass = detection.theDetectedClass
-theorem theDetectedClassIsOutsideTheSpan = detection.theDetectedClassIsOutsideTheSpan
+fact theDetectedClassIsOutsideTheSpan = detection.theDetectedClassIsOutsideTheSpan
 
 // The generic-fibre class, and the complex-period class.
 const theGenericClass: Class

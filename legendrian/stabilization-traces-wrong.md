@@ -36,9 +36,9 @@ pred less_than = integer.less_than
 func stabilize = traces.stabilize
 func traceSign = traces.traceSign
 pred isLoose = traces.isLoose
-axiom aStabilizationIsLoose = traces.aStabilizationIsLoose
-axiom forwardTraceSign = traces.forwardTraceSign
-axiom reverseTraceSign = traces.reverseTraceSign
+fact aStabilizationIsLoose = traces.aStabilizationIsLoose
+fact forwardTraceSign = traces.forwardTraceSign
+fact reverseTraceSign = traces.reverseTraceSign
 
 // φ₀ — "standard real-plane Legendrian link ϕ₀ ⊂ S¹⁵ at the negative end" (§3.4).
 const phiZero: Link
