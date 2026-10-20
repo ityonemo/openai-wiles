@@ -34,7 +34,6 @@ homotopy invariance of the Chern character, and that a locally constant function
 connected, locally path-connected space is constant. All four are textbook.
 
 ```2b4m
-import integer <<< "std/integer.b4m"
 
 sort ParameterPoint // b in H
 sort TopologicalClass // a class in H^even(T, Q)
