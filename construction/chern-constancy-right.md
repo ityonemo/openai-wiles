@@ -142,7 +142,6 @@ sort Period = marked.Period
 sort CycleClass = marked.CycleClass
 
 pred inParameterSet = marked.inParameterSet
-pred avoidsExceptional = marked.avoidsExceptional
 pred isAlgebraic = marked.isAlgebraic
 
 // The fibre map H -> U of Lemma 12.1, and the class it marks out at a parameter point.

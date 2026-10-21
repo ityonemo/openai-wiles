@@ -29,7 +29,6 @@ sort Int = integer.Int
 const ZERO = integer.ZERO
 const ONE = integer.ONE
 func neg = integer.neg
-func sub = integer.sub
 func add = integer.add
 func mul = integer.mul
 func stabilize = traces.stabilize
